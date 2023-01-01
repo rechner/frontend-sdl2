@@ -16,7 +16,7 @@ add_executable(projectMSDL WIN32
         RenderLoop.h
         SDLRenderingWindow.h
         SDLRenderingWindow.cpp
-        )
+        RequestHandler.cpp RequestHandler.h RequestHandlerFactory.cpp RequestHandlerFactory.h HttpServer.cpp HttpServer.h RemoteControl.cpp RemoteControl.h RemoteNotification.cpp RemoteNotification.h)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     target_sources(projectMSDL
@@ -50,6 +50,7 @@ target_link_libraries(projectMSDL
         PRIVATE
         libprojectM::${PROJECTM_LINKAGE}
         Poco::Util
+        Poco::Net
         SDL2::SDL2$<$<STREQUAL:${SDL2_LINKAGE},static>:-static>
         SDL2::SDL2main
         )

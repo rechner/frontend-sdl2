@@ -6,6 +6,7 @@
 
 #include "AudioCapture.h"
 #include "ProjectMWrapper.h"
+#include "RemoteControl.h"
 #include "RenderLoop.h"
 #include "SDLRenderingWindow.h"
 
@@ -23,6 +24,7 @@ ProjectMSDLApplication::ProjectMSDLApplication()
     addSubsystem(new SDLRenderingWindow);
     addSubsystem(new ProjectMWrapper);
     addSubsystem(new AudioCapture);
+    addSubsystem(new RemoteControl);
 }
 
 const char* ProjectMSDLApplication::name() const
@@ -148,7 +150,7 @@ void ProjectMSDLApplication::defineOptions(Poco::Util::OptionSet& options)
 
 int ProjectMSDLApplication::main(POCO_UNUSED const std::vector<std::string>& args)
 {
-    RenderLoop renderLoop;
+    RenderLoop renderLoop(<#initializer #>);
     renderLoop.Run();
 
     return EXIT_SUCCESS;

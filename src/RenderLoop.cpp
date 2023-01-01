@@ -1,17 +1,22 @@
 #include "RenderLoop.h"
 
 #include "FPSLimiter.h"
+#include "RemoteNotification.h"
 
+#include <Poco/NotificationQueue.h>
 #include <Poco/Util/Application.h>
 
 #include <SDL2/SDL.h>
 
-RenderLoop::RenderLoop()
-    : _audioCapture(Poco::Util::Application::instance().getSubsystem<AudioCapture>())
+RenderLoop::RenderLoop(Poco::NotificationQueue& queue)
+    : _remoteControl(Poco::Util::Application::instance().getSubsystem<RemoteControl>())
+    , _audioCapture(Poco::Util::Application::instance().getSubsystem<AudioCapture>())
     , _projectMWrapper(Poco::Util::Application::instance().getSubsystem<ProjectMWrapper>())
     , _sdlRenderingWindow(Poco::Util::Application::instance().getSubsystem<SDLRenderingWindow>())
     , _projectMHandle(_projectMWrapper.ProjectM())
+    , _queue(queue)
 {
+    Poco::NotificationQueue _queue;
 }
 
 void RenderLoop::Run()
@@ -33,6 +38,7 @@ void RenderLoop::Run()
     {
         limiter.StartFrame();
         PollEvents();
+        PollNotifications();
         CheckViewportSize();
         _audioCapture.FillBuffer();
         _projectMWrapper.RenderFrame();
@@ -451,4 +457,17 @@ void RenderLoop::PresetSwitchedEvent(bool isHardCut, unsigned int index, void* c
     projectm_free_string(presetName);
 
     that->_sdlRenderingWindow.SetTitle(newTitle);
+}
+void RenderLoop::PollNotifications()
+{
+    AutoPtr<Notification> pNf = _queue.dequeueNotification();
+    if (pNf) {
+
+    }
+}
+
+
+void RemoteNotification(RemoteNotification* notification) {
+    std::cout << "Handle RemoteNotification: " << notification->name() << std::endl;
+    notification->release();
 }

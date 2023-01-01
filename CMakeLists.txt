@@ -39,7 +39,7 @@ endif()
 
 find_package(libprojectM REQUIRED)
 find_package(SDL2 REQUIRED)
-find_package(Poco REQUIRED COMPONENTS Util)
+find_package(Poco REQUIRED COMPONENTS Util Net)
 
 include(SDL2Target)
 include(dependencies_check.cmake)

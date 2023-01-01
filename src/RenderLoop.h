@@ -2,14 +2,17 @@
 
 #include "AudioCapture.h"
 #include "ProjectMWrapper.h"
+#include "RemoteControl.h"
+#include "RemoteNotification.h"
 #include "SDLRenderingWindow.h"
 
 #include <Poco/Logger.h>
+#include <Poco/NotificationQueue.h>
 
 class RenderLoop
 {
 public:
-    RenderLoop();
+    RenderLoop(Poco::NotificationQueue& queue);
 
     void Run();
 
@@ -71,9 +74,13 @@ protected:
      */
     static void PresetSwitchedEvent(bool isHardCut, unsigned int index, void* context);
 
+    void RemoteNotification(RemoteNotification* notification);
+
     AudioCapture& _audioCapture;
     ProjectMWrapper& _projectMWrapper;
     SDLRenderingWindow& _sdlRenderingWindow;
+    RemoteControl& _remoteControl;
+    Poco::NotificationQueue& _queue;
 
     projectm* _projectMHandle{ nullptr };
 
@@ -87,5 +94,6 @@ protected:
     ModifierKeyStates _keyStates; //!< Current "pressed" states of modifier keys
 
     Poco::Logger& _logger{ Poco::Logger::get("RenderLoop") }; //!< The class logger.
+    void PollNotifications();
 };
 
